@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+//REMEMBER:Add URL for your db
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  firstName String?
+  lastName  String?
+  reusName  String?
+
+  email          String?   @unique
+  emailVerified  DateTime?
+  image          String?
+  hashedPassword String?
+
+  birthDate DateTime? //??
+
+  //User location
+  country String?
+  city    String?
+  state   String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  favoriteIds String[] @db.ObjectId
+
+  descripton  String?
+  phoneNumber String?
+
+  accounts               Account[]
+  listings               Listing[]
+  reservations           Reservation[]
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provide           String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provide, providerAccountId])
+}
+
+model Listing {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String   @db.ObjectId
+  title         String
+  description   String
+  imageSrc      String
+  imagesSrc     String[]
+  createdAt     DateTime @default(now())
+  category      String
+  //---------------
+  bedroomCount  Int
+  bathroomCount Int
+  //---------------
+  clientCount   Int
+  price         Int
+  locationvalue String
+  
+  country       String
+  addressLine1  String
+  city          String
+  state         String
+  postalCode    String
+
+  latitude       Float
+  longitude      Float
+
+  amenity String[]
+  rules   String[]
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  reservations Reservation[]
+}
+
+model Reservation {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  listingId   String   @db.ObjectId
+  date      DateTime
+  startDate String //DateTime
+  endDate   String //DateTime
+  createdAt DateTime @default(now())
+
+  peopleCount Int
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
