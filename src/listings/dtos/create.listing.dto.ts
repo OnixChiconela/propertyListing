@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { IsNotEmpty, IsNumber, IsString, ValidateNested } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString, ValidateNested, isNumber } from "class-validator";
 
 type Location = {
     value: string
@@ -30,6 +30,14 @@ export class CreateListingDto {
     @IsNotEmpty()
     @IsNumber()
     tableCount: number
+
+    @IsNotEmpty()
+    @IsNumber()
+    bedroomCount: number
+
+    @IsNotEmpty()
+    @IsNumber()
+    bathroomCount: number
 
     @IsNotEmpty()
     @IsNumber()

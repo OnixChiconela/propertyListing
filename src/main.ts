@@ -31,7 +31,7 @@ const wss = new WebSocketServer({ noServer: true }); // Use WebSocketServer corr
   //this part of code will be responsable to know how the credentials arrive here
   app.enableCors({
     credentials: true,
-    origin: 'http://localhost/3020'
+    origin: 'http://localhost/3010'
   })
 
   app.use(passport.initialize());
@@ -40,6 +40,6 @@ const wss = new WebSocketServer({ noServer: true }); // Use WebSocketServer corr
 
   app.setGlobalPrefix('api')
   
-  await app.listen(3020);
+  await app.listen(3010);
 }
 bootstrap();

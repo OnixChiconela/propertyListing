@@ -27,8 +27,8 @@ export class ReservationService {
                 where: {
                     listingId,
                     OR: [
-                        { startDate: { lte: endDate }, endHour: { gte: startDate } },
-                        { startDate: { gte: startDate }, endHour: { lte: endDate } },
+                        { startDate: { lte: endDate }, endDate: { gte: startDate } },
+                        { startDate: { gte: startDate }, endDate: { lte: endDate } },
                         { endDate: { gte: startDate, lte: endDate } }
                     ]
                 }
@@ -99,9 +99,8 @@ export class ReservationService {
                 (reservation) => ({
                     ...reservation,
                     createdAt: reservation.createdAt.toISOString(),
-                    date: reservation.date.toISOString(),
-                    startHour: reservation.startHour,
-                    endHour: reservation.endHour,
+                    startHour: reservation.startDate,
+                    endHour: reservation.endDate,
                     listing: {
                         ...reservation.listing,
                         createdAt: reservation.listing//.createdAt.toISOString()

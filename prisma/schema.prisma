@@ -97,7 +97,6 @@ model Reservation {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String   @db.ObjectId
   listingId   String   @db.ObjectId
-  date      DateTime
   startDate String //DateTime
   endDate   String //DateTime
   createdAt DateTime @default(now())
