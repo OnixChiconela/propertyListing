@@ -1,0 +1,42 @@
+# Property Listing and Reservation Backend
+
+This is a backend project for property listing and reservations, developed using Nest Js, TypeScript, Prisma, jwt, and other technologies
+
+## Technologies
+
+- **TypeScript**: A programming language that adds static typing to JavaScript.
+- **NestJS**: A framework for building efficient and scalable server-side applications in Node.js.
+- **Prisma**: A ORM (Object-Relational Mapping) for Node.js and TypeScript.
+- **JWT**: JSON Web Tokens for secure authentication.
+
+## Project Structure
+
+/src
+-/actions
+-/auth
+--/controllers
+---auth.controller.ts
+--/services
+---auth.service.ts
+--/utils
+---/session
+----session.serialize.ts
+---jwt.stategy.ts
+---LocalStrategy.ts
+--auth.module.ts
+
+-/favorites
+--/controllers
+---favorites.controller.ts
+--/services
+---favorites.service.ts
+--favorite.module
+
+... 
+
+## Enviroment 
+
+Create a `.env` file at root of the project 
+'''plaintext
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public" //your database details
+JWT_SECRET="your_secrete key
