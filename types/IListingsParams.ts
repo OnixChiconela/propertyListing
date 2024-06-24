@@ -4,6 +4,9 @@ export interface IListingsParams {
     category?: string;
     clientCount?: number;
 
+    bedroomCount?: number
+    bathroomCount?: number
+
     addressLine1?: string;
     country?: string;
     city?: string;

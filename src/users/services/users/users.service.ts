@@ -74,11 +74,17 @@ export class UsersService {
                 }
             })
 
+            if(!user) {
+
+            }
+
             return user
         } catch (error) {
             console.log("User wasn't updated")
         }
     }
+
+    
 
     async deleteUser(id: string) {
         try {

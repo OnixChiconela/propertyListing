@@ -4,6 +4,8 @@ import * as bcrypt from "bcrypt"
 import { AuthDto } from 'src/auth/dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 
+import * as nodemailer from "nodemailer"
+
 @Injectable()
 export class AuthService {
     constructor(
@@ -46,5 +48,27 @@ export class AuthService {
         } catch(error) {
                 console.error("fail to get current user!: ", error)
         }
+    }
+
+    //email verification
+    async  sendVerificationEmail(email: string, token: string) {
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'setyouremal@gmail.com',
+                pass: 'your-pass'
+            }
+        })
+
+        const verificationUrl = `http://localhost:3010/api/verify-email?token=${token}`
+
+        const mailOptions = {
+            from: 'setyouremail@gmail.com',
+            to: email,
+            subject: 'Email verification',
+            text: `Please verify your email by clicking the following link: ${verificationUrl}`
+        }
+
+        await transporter.sendMail(mailOptions)
     }
 }

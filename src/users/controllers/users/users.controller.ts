@@ -39,7 +39,11 @@ export class UsersController {
 
     @Patch("updateUser/:email")
     async updateUser(@Param("email") email: string) {
+        try {
 
+        } catch (error) {
+            
+        }
     }
 
     @Delete(':id')

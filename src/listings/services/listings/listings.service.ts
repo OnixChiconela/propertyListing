@@ -28,7 +28,7 @@ export class ListingsService {
             return listing
 
         } catch (error: any) {
-            console.log('listing service')
+            console.log('listing service. crete listing error: ', error)
             console.log(error)
         }
 
@@ -46,6 +46,9 @@ export class ListingsService {
                 country,
                 city,
                 state,
+
+                bedroomCount,
+                bathroomCount,
 
                 latitude,
                 longitude,
@@ -68,6 +71,18 @@ export class ListingsService {
             if (clientCount) {
                 query.clientCount = {
                     gte: +clientCount
+                }
+            }
+
+            if (bathroomCount) {
+                query.bathroomCount = {
+                    gte: +bathroomCount
+                }
+            }
+
+            if (bedroomCount) {
+                query.bedroomCount = {
+                    gte: +bedroomCount
                 }
             }
 
@@ -98,8 +113,6 @@ export class ListingsService {
                         some: {
                             OR: [
                                 {
-                                    // verify if reservetion date it's the same with the especify date
-                                    //verify if start date it's after or equal especify end date
                                     endDate: { gte: startDate },
                                     startDate: { lte: startDate }
                                 },
@@ -127,6 +140,7 @@ export class ListingsService {
 
             return safeListings
         } catch (error: any) {
+            console.log("get listing error: ", error)
             throw new Error(error)
         }
     }

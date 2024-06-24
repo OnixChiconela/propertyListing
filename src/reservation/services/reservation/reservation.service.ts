@@ -1,6 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { ListingsService } from 'src/listings/services/listings/listings.service';
 import { CreateReservationDto } from 'src/reservation/dto/createReservation.dto';
 
 export interface IParams {
@@ -12,7 +11,6 @@ export interface IParams {
 @Injectable()
 export class ReservationService {
     constructor(
-        private listingsService: ListingsService,
         private prisma: PrismaClient
     ) { }
 
@@ -21,7 +19,7 @@ export class ReservationService {
     async createReservation(createReservationDto: CreateReservationDto, userId: string) {
         try {
 
-            const { listingId, startDate, endDate, peopleCount } = createReservationDto
+            const { listingId, startDate, endDate } = createReservationDto
 
             const exitingReservation = await this.prisma.reservation.findFirst({
                 where: {
@@ -58,6 +56,10 @@ export class ReservationService {
     async getReservations() {
         try {
             const reservations = await this.prisma.reservation.findMany()
+
+            if(!reservations) {
+                throw new BadRequestException("Reservations was not founded")
+            }
             return reservations
         } catch (error: any) {
             throw new Error(error)
@@ -103,7 +105,7 @@ export class ReservationService {
                     endHour: reservation.endDate,
                     listing: {
                         ...reservation.listing,
-                        createdAt: reservation.listing//.createdAt.toISOString()
+                        createdAt: reservation.createdAt.toISOString()
                     }
                 })
             )
