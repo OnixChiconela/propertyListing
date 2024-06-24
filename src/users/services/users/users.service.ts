@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { CreateUserDto } from 'src/users/dtos/createUser.dto';
 import * as bcrypt from 'bcrypt'
 import { UpdateUserDto } from 'src/users/dtos/updateUser.dto';
+import * as crypto from "crypto";
 
 @Injectable()
 export class UsersService {
@@ -30,10 +31,48 @@ export class UsersService {
                     hashedPassword: hashedPassword
                 }
             })
+
+            //token generation
+            const token = this.generateVerificationToken()
+
+            await this.prisma.verificationToken.create({
+                data: {
+                    token,
+                    email: newUser.email,
+                    expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
+                }
+            })
             console.log("new User: ", newUser)
             return newUser
         } catch (error) {
             throw new Error(error)
+        }
+    }
+
+    private generateVerificationToken() {
+        return crypto.randomBytes(32).toString('hex')
+    }
+
+    async verifyEmail(token: string) {
+        try {
+            const verificationRec = await this.prisma.verificationToken.findUnique({
+                where: {token}
+            })
+
+            if (!verificationRec || verificationRec.expiresAt < new Date()) {
+                throw new BadRequestException('Invalid or expired token')
+            }
+
+            await this.prisma.user.update({
+                where: {
+                    email: verificationRec.email
+                },
+                data: {
+                    emailVerified: true
+                }
+            })
+        } catch (error) {
+
         }
     }
 
