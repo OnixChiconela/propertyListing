@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { CreateReservationDto } from 'src/reservation/dto/createReservation.dto';
 
@@ -78,11 +78,9 @@ export class ReservationService {
             if (listingId) {
                 query.listingId = listingId
             }
-
             if (userId) {
                 query.userId = userId
             }
-
             if (authorId) {
                 query.listing = {userId: authorId}
             }
@@ -118,11 +116,15 @@ export class ReservationService {
 
     async deleteReservation(id: string) {
         try {
-            return await this.prisma.reservation.delete({
+            const deletedReservation = await this.prisma.reservation.delete({
                 where: {
                     id
                 }
             })
+            if(!deletedReservation) {
+                throw new HttpException("seems like reservation does not exist", HttpStatus.NOT_FOUND)
+            }
+            return deletedReservation
         } catch (error) {
             throw new Error("something went wrong")
         }

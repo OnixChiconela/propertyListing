@@ -11,24 +11,19 @@ export class ReservationController {
         private authService: AuthService
     ) { }
 
-    @Post('newReservation')
+    @Post('new-reservation')
     async newReservation(@Body() createreservationDto: CreateReservationDto, @Req() req: Request) {
         try {
             const cookie = req.cookies['jwt']
-
             const currentUser = await this.authService.getCurrentUser(cookie)
 
             if (!currentUser) {
-                console.log("Seems like don't have an user logged in")
-                throw new UnauthorizedException
+                throw new UnauthorizedException("user was not founded")
             }
 
             const reservation = await this.reservationService.createReservation(createreservationDto, currentUser.id)
-            console.log("reser.controller, Reservation Created successfuly")
-
             return reservation
         } catch (error) {
-            console.log("An error occuring during reservation creation", error)
             throw new Error(error)
         }
     }
@@ -40,7 +35,7 @@ export class ReservationController {
         return reservations
     }
 
-    @Get('userReservations')
+    @Get('user-reservations')
     async getUserReservation(@Query() params: IParams) {
         const reservation = this.reservationService.getUserReservation(params)
         return reservation
@@ -57,7 +52,6 @@ export class ReservationController {
             }
 
             const reservation = await this.reservationService.deleteReservation(id)
-            return reservation;
         } catch (error: any) {
             throw new Error(error)
         }

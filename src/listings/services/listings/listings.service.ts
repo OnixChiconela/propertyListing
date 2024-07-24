@@ -169,7 +169,7 @@ export class ListingsService {
                     createdAt: listing.user.createdAt.toISOString(),
                     updatedAt: listing.user.updatedAt.toISOString(),
                     emailVerified:
-                        listing.user.emailVerified?.toDateString() || null
+                        listing.user.emailVerified || false
                 }
             }
 

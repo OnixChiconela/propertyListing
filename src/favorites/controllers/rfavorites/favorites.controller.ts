@@ -12,7 +12,7 @@ export class FavoritesController {
         private authService: AuthService
     ) { }
 
-    @Post('newFavorite/:id')
+    @Post('new-favorite/:id')
     async favorite(@Req() request: Request, @Param('id') listingId: string) {
         const cookie = request.cookies['jwt']
 
@@ -46,7 +46,7 @@ export class FavoritesController {
         return user
     }
 
-    @Delete('deleteFavorite/:id')
+    @Delete('delete-favorite/:id')
     async deleteFavorite(@Req() request: Request, @Param('id') listingId: string) {
 
         const cookie = request.cookies['jwt']
@@ -82,7 +82,7 @@ export class FavoritesController {
         return user
     }
 
-    @Get('favoriteListing')
+    @Get('favorite-listing')
     async getFavoriteListing(@Req() request: Request) {
         try {
             const cookie = request.cookies['jwt']
