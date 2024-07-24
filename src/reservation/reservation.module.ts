@@ -6,6 +6,7 @@ import { ListingsService } from 'src/listings/services/listings/listings.service
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/services/users/users.service';
 import { PrismaClient } from '@prisma/client';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   controllers: [ReservationController],
@@ -17,9 +18,14 @@ import { PrismaClient } from '@prisma/client';
     PrismaClient
   ],
   imports: [
-    JwtModule.register({
-      secret: 'nova-chave',
-      signOptions: { expiresIn: '7d' }
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '7d' }
+      }),
+      inject: [ConfigService]
+
     }),
   ]
 })

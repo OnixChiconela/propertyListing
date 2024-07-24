@@ -8,6 +8,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { LocalStrategy } from './utils/LocalStrategy';
 import { JwtStrategy } from './utils/jwt.strategy';
 import { AuthMiddleware } from './middlewares/auth.middleware';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   controllers: [AuthController],
@@ -16,11 +17,16 @@ import { AuthMiddleware } from './middlewares/auth.middleware';
       defaultStrategy: 'local',
       session: true
     }),
-    JwtModule.register({
-      secret: 'new-key',
-      signOptions: { expiresIn: '7d' }
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '7d' }
+      }),
+      inject: [ConfigService]
+
     }),
-    
+
   ],
   providers: [
     AuthService,
@@ -31,13 +37,13 @@ import { AuthMiddleware } from './middlewares/auth.middleware';
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-      (consumer: MiddlewareConsumer) => {
-        consumer
-         .apply(AuthMiddleware)
-         .forRoutes({
+    (consumer: MiddlewareConsumer) => {
+      consumer
+        .apply(AuthMiddleware)
+        .forRoutes({
           path: 'auth/profile',
           method: RequestMethod.GET
-         })
-      }
+        })
+    }
   }
 }

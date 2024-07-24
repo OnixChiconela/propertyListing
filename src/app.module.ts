@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { ListingsModule } from './listings/listings.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { FavoritesModule } from './favorites/favorites.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -14,6 +15,9 @@ import { FavoritesModule } from './favorites/favorites.module';
     ListingsModule, 
     ReservationModule, 
     FavoritesModule,
+    ConfigModule.forRoot({
+      isGlobal: true
+    })
   ],
   controllers: [AppController],
   providers: [AppService],

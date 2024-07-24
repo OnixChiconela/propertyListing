@@ -6,6 +6,7 @@ import { AuthService } from 'src/auth/services/auth/auth.service';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { LocalStrategy } from 'src/auth/utils/LocalStrategy';
 import { UsersService } from 'src/users/services/users/users.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   providers: [
@@ -16,9 +17,14 @@ import { UsersService } from 'src/users/services/users/users.service';
   ],
   controllers: [ListingsController],
   imports: [
-    JwtModule.register({
-      secret: 'nova-chave',
-      signOptions: { expiresIn: '7d' }
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '7d' }
+      }),
+      inject: [ConfigService]
+
     }),
   ]
 })
