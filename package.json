@@ -1,10 +1,9 @@
 {
   "name": "rent",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
-  "author": "",
-  "private": true,
-  "license": "UNLICENSED",
+  "author": "jose chiconela",
+  "private": false,
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
