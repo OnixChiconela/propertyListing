@@ -1,7 +1,7 @@
 import { Injectable, Param } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { CreateListingDto } from 'src/listings/dtos/create.listing.dto';
-import { IListingsParams } from 'types/IListingsParams';
+import { IListingsParams } from 'src/types/IListingsParams';
 
 export interface Iparams {
     listingId?: string

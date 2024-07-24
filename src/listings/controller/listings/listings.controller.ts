@@ -12,7 +12,7 @@ import { Request } from 'express';
 import { AuthService } from 'src/auth/services/auth/auth.service';
 import { CreateListingDto } from 'src/listings/dtos/create.listing.dto';
 import { ListingsService } from 'src/listings/services/listings/listings.service';
-import { IListingsParams } from 'types/IListingsParams';
+import { IListingsParams } from 'src/types/IListingsParams';
 
 @Controller('listings')
 export class ListingsController {
